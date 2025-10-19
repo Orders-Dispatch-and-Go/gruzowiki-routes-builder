@@ -85,7 +85,7 @@ func (pgr *PGRoutingQueries) BuildRout(points *dto.CreateRouteDTO) (dto.RouteDTO
 		)
 		SELECT 
 			PathId,
-			ST_AsGeoJSON(ST_LineMerge(ST_Collect(edge_geom))) AS RouteGeometry,
+			ST_AsGeoJSON(ST_FlipCoordinates(ST_LineMerge(ST_Collect(edge_geom)))) AS RouteGeometry,
 			ST_Length(ST_LineMerge(ST_Collect(edge_geom))) AS RouteLength
 		FROM path_edges
 		GROUP BY PathId
