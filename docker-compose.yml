@@ -1,30 +1,31 @@
 services:  
-  postgres:
-    build: .
-    container_name: routes_db
-    environment:
-      - POSTGRES_PASSWORD=${PG_PASSWORD}
-      - POSTGRES_USER=${PG_USER}
-      - POSTGRES_DB=${PG_DATABASE}
-    expose:
-      - ${PG_PORT}
-    volumes:
-      - ./tmp:${PG_DATA}
-      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-    restart: no
-    deploy:
-      resources:
-        limits:
-          memory: 8G
-          cpus: '4.0'
+#  postgres:
+#    build: .
+#    container_name: routes_db
+#    environment:
+#      - POSTGRES_PASSWORD=${PG_PASSWORD}
+#      - POSTGRES_USER=${PG_USER}
+#      - POSTGRES_DB=${PG_DATABASE}
+#    expose:
+#      - ${PG_PORT}
+#    volumes:
+#      - ./tmp:${PG_DATA}
+#      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+#    restart: no
+#    deploy:
+#      resources:
+#        limits:
+#          memory: 8G
+#          cpus: '4.0'
     
   server:
     build: ./src
     container_name: server
     environment:
-      - CONN_STRING=postgres://${PG_USER}:${PG_PASSWORD}@routes_db:${PG_PORT}/${PG_DATABASE}
+      - CONN_STRING=${OSRM_IP}:${OSRM_PORT}
+      - OVERVIEW=${OVERVIEW}
+      - ALTERNATIVES=${ALTERNATIVES}
+      - STEPS=${STEPS}
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     restart: always
-    depends_on:
-      - postgres

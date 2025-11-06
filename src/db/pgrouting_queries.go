@@ -18,6 +18,12 @@ type PGRoutingQueries struct {
 	Connection *pgx.Conn
 }
 
+/*
+ * +---------------------------------------+
+ * | Functions for working with connection |
+ * +---------------------------------------+
+*/
+
 func (pgr *PGRoutingQueries) EstablishConnection(connString string) {
 	var err error
 
@@ -31,7 +37,13 @@ func (pgr *PGRoutingQueries) FuckingDestroyConnection() {
 	pgr.Connection.Close(context.Background())
 }
 
-func (pgr *PGRoutingQueries) BuildRout(points *dto.CreateRouteDTO) (dto.RouteDTO, error) {
+/*
+ * +-----------------------------------+
+ * | Functions for working with routes |
+ * +-----------------------------------+
+*/
+
+func (pgr *PGRoutingQueries) BuildRoute(points *dto.CreateRouteDTO) (dto.RouteDTO, error) {
 	var vertices *list.List = list.New();
 
 	var vertexId int64
@@ -85,7 +97,7 @@ func (pgr *PGRoutingQueries) BuildRout(points *dto.CreateRouteDTO) (dto.RouteDTO
 		)
 		SELECT 
 			PathId,
-			ST_AsGeoJSON(ST_LineMerge(ST_Collect(edge_geom))) AS RouteGeometry,
+			ST_AsGeoJSON(ST_FlipCoordinates(ST_LineMerge(ST_Collect(edge_geom)))) AS RouteGeometry,
 			ST_Length(ST_LineMerge(ST_Collect(edge_geom))) AS RouteLength
 		FROM path_edges
 		GROUP BY PathId
@@ -109,6 +121,12 @@ func (pgr *PGRoutingQueries) BuildRout(points *dto.CreateRouteDTO) (dto.RouteDTO
 
 	return dto.RouteDTO{Way: routeGeom.Coordinates, Graph: []int32{}}, nil
 }
+
+/*
+ * +---------------------+
+ * | Auxiliary functions |
+ * +---------------------+
+*/
 
 func ListToString(list list.List) string {
 	var builder strings.Builder = strings.Builder{}
