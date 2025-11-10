@@ -109,17 +109,17 @@ func (pgr *PGRoutingQueries) BuildRoute(points *dto.CreateRouteDTO) (dto.RouteDT
 	err := pgr.Connection.QueryRow(context.Background(), query).Scan(&pathId, &routeGeomString, &routeLength);
 	if err != nil {
 		log.Error("Build road failed: %v\n", err)
-		return dto.RouteDTO{Way: [][]float64{}, Graph: []int32{}}, BuildRouteError{"Build road failed"}
+		return dto.RouteDTO{Way: [][]float64{}, Distance: 0, Duration: 0}, BuildRouteError{"Build road failed"}
 	}
 
 	var routeGeom PgrGeoJson
 	err = json.Unmarshal([]byte(routeGeomString), &routeGeom)
 	if err != nil {
 		log.Error("Failed to parse JSON: %v\n", err)
-		return dto.RouteDTO{Way: [][]float64{}, Graph: []int32{}}, BuildRouteError{"JSON parse failed"}
+		return dto.RouteDTO{Way: [][]float64{}, Distance: 0, Duration: 0}, BuildRouteError{"JSON parse failed"}
 	}
 
-	return dto.RouteDTO{Way: routeGeom.Coordinates, Graph: []int32{}}, nil
+	return dto.RouteDTO{Way: routeGeom.Coordinates, Distance: 0, Duration: 0}, nil
 }
 
 /*
