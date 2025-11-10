@@ -9,7 +9,7 @@ type OSRMResponse struct {
 type Route struct {
     Distance float64   `json:"distance"` // в метрах
     Duration float64   `json:"duration"` // в секундах
-    Geometry GeoJson    `json:"geometry"` // полилиния в формате polyline
+    Geometry GeoJson    `json:"geometry"` // в формате geojson
     Legs     []Leg     `json:"legs"`
     Weight   float64   `json:"weight"`
     WeightName string  `json:"weight_name"`

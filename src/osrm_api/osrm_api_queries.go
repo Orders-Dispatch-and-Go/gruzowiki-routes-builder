@@ -85,7 +85,10 @@ func (osrm *OSRMQueries) BuildRoute(points *dto.CreateRouteDTO) (*dto.RouteDTO, 
 
 	coordinates := ConvertCoordinatesToLatLng(osrmResponse.Routes[0].Geometry.Coordinates)
     
-    return &(dto.RouteDTO{Way: coordinates, Graph: []int32{}}), nil
+    return &(dto.RouteDTO{Way: coordinates,
+            Distance: osrmResponse.Routes[0].Distance,
+            Duration: osrmResponse.Routes[0].Duration}),
+            nil
 }
 
 /*
