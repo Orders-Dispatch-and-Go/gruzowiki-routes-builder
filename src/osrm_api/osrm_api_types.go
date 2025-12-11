@@ -25,7 +25,7 @@ type Leg struct {
 type Step struct {
     Distance    float64   `json:"distance"`
     Duration    float64   `json:"duration"`
-    Geometry    string    `json:"geometry"`
+    Geometry    GeoJson    `json:"geometry"`
     Name        string    `json:"name"`
     Instruction string    `json:"instruction"`
     Maneuver    Maneuver  `json:"maneuver"`
